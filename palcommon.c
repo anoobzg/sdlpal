@@ -121,13 +121,21 @@ PAL_RLEBlitToSurfaceWithShadow(
    uiLen = uiWidth * uiHeight;
 
    //
+   // Reject invalid or corrupt header to prevent buffer overread.
+   //
+   if (uiWidth == 0 || uiHeight == 0 || uiWidth > 4096 || uiHeight > 4096)
+   {
+      return -1;
+   }
+
+   //
    // Start decoding and blitting the bitmap.
    //
    lpBitmapRLE += 4;
    for (i = 0; i < uiLen;)
    {
       T = *lpBitmapRLE++;
-      if ((T & 0x80) && T <= 0x80 + uiWidth)
+      if ((T & 0x80) && T > 0x80 && T <= 0x80 + uiWidth)
       {
          i += T - 0x80;
          uiSrcX += T - 0x80;
@@ -139,6 +147,13 @@ PAL_RLEBlitToSurfaceWithShadow(
       }
       else
       {
+         //
+         // Validate run length to prevent buffer overread (corrupt RLE data).
+         //
+         if (T == 0 || T > uiWidth)
+         {
+            break;
+         }
          //
          // Prepare coordinates.
          //
@@ -320,13 +335,21 @@ PAL_RLEBlitWithColorShift(
    uiLen = uiWidth * uiHeight;
 
    //
+   // Reject invalid or corrupt header to prevent buffer overread.
+   //
+   if (uiWidth == 0 || uiHeight == 0 || uiWidth > 4096 || uiHeight > 4096)
+   {
+      return -1;
+   }
+
+   //
    // Start decoding and blitting the bitmap.
    //
    lpBitmapRLE += 4;
    for (i = 0; i < uiLen;)
    {
       T = *lpBitmapRLE++;
-      if ((T & 0x80) && T <= 0x80 + uiWidth)
+      if ((T & 0x80) && T > 0x80 && T <= 0x80 + uiWidth)
       {
          i += T - 0x80;
          uiSrcX += T - 0x80;
@@ -338,6 +361,13 @@ PAL_RLEBlitWithColorShift(
       }
       else
       {
+         //
+         // Validate run length to prevent buffer overread (corrupt RLE data).
+         //
+         if (T == 0 || T > uiWidth)
+         {
+            break;
+         }
          //
          // Prepare coordinates.
          //
@@ -524,6 +554,14 @@ PAL_RLEBlitMonoColor(
    uiLen = uiWidth * uiHeight;
 
    //
+   // Reject invalid or corrupt header to prevent buffer overread.
+   //
+   if (uiWidth == 0 || uiHeight == 0 || uiWidth > 4096 || uiHeight > 4096)
+   {
+      return -1;
+   }
+
+   //
    // Start decoding and blitting the bitmap.
    //
    lpBitmapRLE += 4;
@@ -531,7 +569,7 @@ PAL_RLEBlitMonoColor(
    for (i = 0; i < uiLen;)
    {
       T = *lpBitmapRLE++;
-      if ((T & 0x80) && T <= 0x80 + uiWidth)
+      if ((T & 0x80) && T > 0x80 && T <= 0x80 + uiWidth)
       {
          i += T - 0x80;
          uiSrcX += T - 0x80;
@@ -543,6 +581,13 @@ PAL_RLEBlitMonoColor(
       }
       else
       {
+         //
+         // Validate run length to prevent buffer overread (corrupt RLE data).
+         //
+         if (T == 0 || T > uiWidth)
+         {
+            break;
+         }
          //
          // Prepare coordinates.
          //
