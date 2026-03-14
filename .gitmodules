@@ -1,6 +1,3 @@
 [submodule "3rd/SDL"]
 	path = 3rd/SDL
 	url = ../SDL.git
-[submodule "3rd/mingw-std-threads"]
-	path = 3rd/mingw-std-threads
-	url = ../mingw-std-threads.git
