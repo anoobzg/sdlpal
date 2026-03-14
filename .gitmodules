@@ -1,6 +1,3 @@
-[submodule "3rd/googletest"]
-	path = 3rd/googletest
-	url = ../googletest
 [submodule "3rd/SDL"]
 	path = 3rd/SDL
 	url = ../SDL.git
