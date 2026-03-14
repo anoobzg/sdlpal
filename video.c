@@ -1323,6 +1323,8 @@ VIDEO_CreateCompatibleSurface(
 	return VIDEO_CreateCompatibleSizedSurface(pSource, NULL);
 }
 
+#define PAL_MAX_SURFACE_DIM 4096
+
 SDL_Surface *
 VIDEO_CreateCompatibleSizedSurface(
 	SDL_Surface    *pSource,
@@ -1344,18 +1346,35 @@ VIDEO_CreateCompatibleSizedSurface(
 
 --*/
 {
+	int w, h;
+
+	if (pSize != NULL)
+	{
+		w = pSize->w;
+		h = pSize->h;
+		/* Clamp to prevent huge allocation from corrupt RLE/resource (e.g. wrong sprite) */
+		if (w <= 0 || h <= 0 || w > PAL_MAX_SURFACE_DIM || h > PAL_MAX_SURFACE_DIM)
+			return NULL;
+		/* Cannot duplicate larger than source */
+		if (w > pSource->w || h > pSource->h)
+			return NULL;
+	}
+	else
+	{
+		w = pSource->w;
+		h = pSource->h;
+	}
+
 	//
 	// Create the surface
 	//
 #if SDL_VERSION_ATLEAST(3,0,0)
     SDL_Surface* dest = SDL_CreateSurface(
-        pSize ? pSize->w : pSource->w,
-        pSize ? pSize->h : pSource->h,
+        w, h,
         SDL_GetPixelFormatDetails(pSource->format)->format);
 #else
 	SDL_Surface *dest = SDL_CreateRGBSurface(pSource->flags,
-		pSize ? pSize->w : pSource->w,
-		pSize ? pSize->h : pSource->h,
+		w, h,
 		pSource->format->BitsPerPixel,
 		pSource->format->Rmask, pSource->format->Gmask,
 		pSource->format->Bmask, pSource->format->Amask);

@@ -989,6 +989,12 @@ PAL_InGameMenu(
    lpMenuBox = PAL_CreateBox(PAL_XY(3, 37), 3, PAL_MenuTextMaxWidth(rgMainMenuItem, 4) - 1, 0, FALSE);
 
    //
+   // Update screen so menu background (scene + cash + box) is visible before menu loop.
+   // Fixes menu appearing with no background when opening with ESC.
+   //
+   VIDEO_UpdateScreen(NULL);
+
+   //
    // Process the menu
    //
    while (TRUE)

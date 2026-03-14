@@ -36,8 +36,8 @@ PAL_CreateBoxInternal(
 
 	lpBox->pos = PAL_XY(rect->x, rect->y);
 	lpBox->lpSavedArea = VIDEO_DuplicateSurface(gpScreen, rect);
-	lpBox->wHeight = (WORD)rect->w;
-	lpBox->wWidth = (WORD)rect->h;
+	lpBox->wWidth = (WORD)rect->w;
+	lpBox->wHeight = (WORD)rect->h;
 
 	if (lpBox->lpSavedArea == NULL)
 	{
