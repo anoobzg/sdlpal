@@ -7,6 +7,3 @@
 [submodule "3rd/mingw-std-threads"]
 	path = 3rd/mingw-std-threads
 	url = ../mingw-std-threads.git
-[submodule "scripts"]
-	path = scripts
-	url = ../scripts.git
